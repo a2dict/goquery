@@ -9,15 +9,15 @@ func (f PagedQueryFunc) Query(qReq *QReq) (*PageWrap, error) {
 // QReq ...
 type QReq struct {
 	// 页码
-	Page int64
+	Page int64 `json:"page"`
 	// 每页显示条数
-	Size int64
+	Size int64 `json:"size"`
 	// 显示的字段列表. 例如: ["name","age","created_at"],为空,则默认显示所有0
-	Select []string
+	Select []string `json:"select"`
 	// 排序, 例如: ["-created_at"] 则表示按照 created_at 降序排列, 默认按照: ["-created_at"] 排序
-	Sort []string
+	Sort []string `json:"sort"`
 	// 查询条件，例如： GET /v1/logs?q["level"]=DEBUG
-	Q map[string]string
+	Q map[string]string `json:"q"`
 }
 
 // PageWrap ...
