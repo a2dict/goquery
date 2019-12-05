@@ -8,10 +8,26 @@ import (
 	"github.com/jinzhu/gorm"
 )
 
-func BuildPagedQuery(db *gorm.DB, entity interface{}) PagedQueryFunc {
+type DBSupplier = func() *gorm.DB
+
+func BuildPagedQuery(entity interface{}) PagedQueryFunc {
+	return BuildPagedQueryWithDBSupplier(DB, entity)
+}
+
+func BuildPagedQueryWithDB(db *gorm.DB, entity interface{}) PagedQueryFunc {
+	supplier := func() *gorm.DB { return db }
+	return BuildPagedQueryWithDBSupplier(supplier, entity)
+}
+
+// BuildPagedQueryWithDBSupplier
+// eg:
+// entity: &Person{}
+// PagedQueryFunc returns []*Person
+func BuildPagedQueryWithDBSupplier(supplier DBSupplier, entity interface{}) PagedQueryFunc {
 	cols := parseDBCols(entity)
 	colsFilter := ContainStringFilter(cols...)
 	return func(qReq *QReq) (*PageWrap, error) {
+		db := supplier()
 		pw := &PageWrap{}
 		out := reflect.New(reflect.SliceOf(reflect.TypeOf(entity))).Interface()
 		preds := parseQueryMap(qReq.Q)
@@ -69,6 +85,7 @@ func BuildPagedQuery(db *gorm.DB, entity interface{}) PagedQueryFunc {
 		pw.Data = sliceOut
 		return pw, nil
 	}
+
 }
 
 func parseQueryMap(qm map[string]string) []*Predicate {

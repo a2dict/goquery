@@ -27,7 +27,7 @@ func TestGormUtil(t *testing.T) {
 	for _, p := range ps {
 		fmt.Println(p)
 	}
-	qfun := goquery.BuildPagedQuery(goquery.DB(), &Person{})
+	qfun := goquery.BuildPagedQuery(&Person{})
 
 	Convey("Test goquery Query", t, func() {
 		Convey("Test Paging", func() {
