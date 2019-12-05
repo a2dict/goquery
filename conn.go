@@ -29,6 +29,11 @@ func CreateDB(name, dialect, addr string, isDefault bool) Cleanup {
 	}
 }
 
+// SetDefaultDB ...
+func SetDefaultDB(db *gorm.DB) {
+	defaultDB = db
+}
+
 // GetDB ...
 func GetDB(name string) *gorm.DB {
 	if v, ok := dbStore.Load(name); ok {
