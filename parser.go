@@ -80,7 +80,7 @@ func (c *Cond) ToPredicate() *Predicate {
 }
 
 func parseOp(s string) (col, op string) {
-	exp := regexp.MustCompile("^(\\w+)(::(\\w+))?$")
+	exp := regexp.MustCompile("^(\\w+)(:{1,2}(\\w+))?$")
 	sm := exp.FindStringSubmatch(s)
 	col = sm[1]
 	op = EQ

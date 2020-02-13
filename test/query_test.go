@@ -134,6 +134,23 @@ func TestGormUtil(t *testing.T) {
 			}
 		})
 
+		Convey("Test Cond LE With Single `:`", func() {
+			req := &goquery.QReq{
+				Page: 1,
+				Q:    map[string]string{"age:le": "22"},
+				Sort: []string{"-age"},
+			}
+			pw, err := qfun.Query(req)
+			if err != nil {
+				panic(err)
+			}
+			for _, p := range pw.Data.([]*Person) {
+				if !(p.Age <= 22) {
+					panic("Cond LE ERR")
+				}
+			}
+		})
+
 		Convey("Test Cond LIKE", func() {
 			req := &goquery.QReq{
 				Page: 1,
@@ -203,19 +220,6 @@ func TestGormUtil(t *testing.T) {
 		})
 
 	})
-}
-
-func TestIn(t *testing.T) {
-	setup()
-	var res []Person
-	//var q interface{} = []string{"18", "19", "20"}
-	var qs []interface{} = []interface{}{"18", "19", "20"}
-
-	err := goquery.DB().Model(&Person{}).Where("age in (?)", qs).Find(&res).Error
-	if err != nil {
-		panic(err)
-	}
-	fmt.Println(res)
 }
 
 func setup() {

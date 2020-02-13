@@ -35,8 +35,6 @@ func BuildPagedQueryWithDBSupplier(supplier DBSupplier, entity interface{}) Page
 		limit := qReq.Size
 		if limit <= 0 {
 			limit = 20
-		} else if limit > 200 {
-			limit = 200
 		}
 
 		page := qReq.Page
