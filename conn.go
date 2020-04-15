@@ -35,11 +35,11 @@ func SetDefaultDB(db *gorm.DB) {
 }
 
 // GetDB ...
-func GetDB(name string) *gorm.DB {
+func GetDB(name string) (*gorm.DB, bool) {
 	if v, ok := dbStore.Load(name); ok {
-		return v.(*gorm.DB)
+		return v.(*gorm.DB), ok
 	}
-	return nil
+	return nil, false
 }
 
 // DB get default db...
