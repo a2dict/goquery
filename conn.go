@@ -15,7 +15,7 @@ var (
 type Cleanup func()
 
 // CreateDB ...
-func CreateDB(name, dialect, addr string, isDefault bool) Cleanup {
+func CreateDB(name, dialect, addr string, isDefault bool) (*gorm.DB, Cleanup) {
 	db, err := gorm.Open(dialect, addr)
 	if err != nil {
 		log.Fatalf("failed to create db, err:%v", err)
@@ -24,7 +24,7 @@ func CreateDB(name, dialect, addr string, isDefault bool) Cleanup {
 	if defaultDB == nil || isDefault {
 		defaultDB = db
 	}
-	return func() {
+	return db, func() {
 		db.Close()
 	}
 }
